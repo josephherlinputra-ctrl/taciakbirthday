@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Birthday Countdown</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Fredoka', 'Nunito', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #5b7fc4 0%, #6a89cc 20%, #8599d6 40%, #9ba8dd 60%, #b5b3e0 80%, #c9bce3 100%);
+            overflow: hidden;
+            position: relative;
+            padding: 20px;
+        }
+
+        /* Subtle Floating Shapes Background */
+        .shapes-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .shape {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.08);
+            animation: float-slow 20s ease-in-out infinite;
+        }
+
+        .shape:nth-child(1) {
+            width: 120px;
+            height: 120px;
+            left: 10%;
+            top: 20%;
+            animation-delay: 0s;
+            animation-duration: 25s;
+        }
+
+        .shape:nth-child(2) {
+            width: 80px;
+            height: 80px;
+            right: 15%;
+            top: 60%;
+            animation-delay: 3s;
+            animation-duration: 22s;
+        }
+
+        .shape:nth-child(3) {
+            width: 100px;
+            height: 100px;
+            left: 70%;
+            top: 15%;
+            animation-delay: 6s;
+            animation-duration: 28s;
+        }
+
+        .shape:nth-child(4) {
+            width: 60px;
+            height: 60px;
+            left: 5%;
+            bottom: 15%;
+            animation-delay: 2s;
+            animation-duration: 24s;
+        }
+
+        .shape:nth-child(5) {
+            width: 90px;
+            height: 90px;
+            right: 25%;
+            bottom: 25%;
+            animation-delay: 5s;
+            animation-duration: 26s;
+        }
+
+        @keyframes float-slow {
+            0%, 100% {
+                transform: translate(0, 0) scale(1);
+            }
+            25% {
+                transform: translate(20px, -30px) scale(1.1);
+            }
+            50% {
+                transform: translate(-15px, -20px) scale(0.95);
+            }
+            75% {
+                transform: translate(25px, -35px) scale(1.05);
+            }
+        }
+
+        .container {
+            text-align: center;
+            z-index: 10;
+            position: relative;
+            max-width: 500px;
+            width: 100%;
+        }
+
+        .subtitle {
+            font-size: 12px;
+            opacity: 0.6;
+            color: white;
+            margin-bottom: 8px;
+            text-transform: lowercase;
+            letter-spacing: 1px;
+            font-weight: 400;
+        }
+
+        .title {
+            font-size: clamp(28px, 8vw, 38px);
+            font-weight: 700;
+            font-style: italic;
+            text-transform: uppercase;
+            margin-bottom: 32px;
+            letter-spacing: 1px;
+            background: linear-gradient(180deg, #ffffff 0%, #e0e6ed 50%, #b8c5d6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+            line-height: 1.2;
+        }
+
+        .countdown {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 28px;
+            flex-wrap: nowrap;
+        }
+
+        .time-box {
+            background: linear-gradient(135deg, rgba(106, 137, 204, 0.25) 0%, rgba(123, 143, 181, 0.15) 100%);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            border-radius: 20px;
+            padding: 18px 6px;
+            min-width: 70px;
+            flex: 1;
+            max-width: 110px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37),
+                        inset 0 1px 0 0 rgba(255, 255, 255, 0.3);
+        }
+
+        .time-value {
+            font-size: clamp(32px, 8vw, 42px);
+            font-weight: 700;
+            background: linear-gradient(180deg, #ffffff 0%, #e8eef5 40%, #c5d3e3 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+            line-height: 1;
+            margin-bottom: 6px;
+        }
+
+        .time-label {
+            font-size: 11px;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.8);
+            letter-spacing: 1.5px;
+            font-weight: 600;
+        }
+
+        .message-box {
+            background: linear-gradient(135deg, rgba(155, 141, 184, 0.25) 0%, rgba(185, 148, 194, 0.15) 100%);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            border-radius: 28px;
+            padding: 32px 28px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37),
+                        inset 0 1px 0 0 rgba(255, 255, 255, 0.3);
+        }
+
+        .message-box:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px 0 rgba(31, 38, 135, 0.5),
+                        inset 0 1px 0 0 rgba(255, 255, 255, 0.4);
+        }
+
+        .message-box:active {
+            transform: translateY(-2px);
+        }
+
+        .message-title {
+            font-size: clamp(32px, 8vw, 44px);
+            font-weight: 700;
+            font-style: italic;
+            background: linear-gradient(180deg, #ffffff 0%, #f0e6f5 50%, #d5c5e3 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.25));
+            margin-bottom: 6px;
+            line-height: 1.1;
+        }
+
+        .message-subtitle {
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.85);
+            font-weight: 600;
+        }
+
+        .bottom-subtitle {
+            font-size: 12px;
+            opacity: 0.6;
+            color: white;
+            margin-top: 10px;
+            text-transform: lowercase;
+            letter-spacing: 1px;
+            font-weight: 400;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(8px);
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-content {
+            position: relative;
+            background: linear-gradient(135deg, rgba(106, 137, 204, 0.35) 0%, rgba(155, 141, 184, 0.35) 100%);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 2px solid rgba(255, 255, 255, 0.25);
+            margin: 15% auto;
+            padding: 40px;
+            width: 85%;
+            max-width: 450px;
+            border-radius: 32px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5),
+                        inset 0 1px 0 0 rgba(255, 255, 255, 0.4);
+            animation: slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .close {
+            color: white;
+            float: right;
+            font-size: 32px;
+            font-weight: 700;
+            cursor: pointer;
+            line-height: 1;
+            transition: all 0.2s;
+            opacity: 0.7;
+        }
+
+        .close:hover {
+            opacity: 1;
+            transform: rotate(90deg);
+        }
+
+        .modal-message {
+            font-size: clamp(22px, 5vw, 28px);
+            color: white;
+            margin-top: 20px;
+            font-weight: 600;
+            line-height: 1.5;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Birthday Mode */
+        .birthday-title {
+            font-size: clamp(32px, 8vw, 52px);
+            background: linear-gradient(135deg, #ff6b9d 0%, #ffa8c5 50%, #ffd4e5 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            filter: drop-shadow(0 4px 10px rgba(255, 107, 157, 0.5));
+        }
+
+        .birthday-subtitle {
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.9);
+            margin-top: 12px;
+            line-height: 1.6;
+            font-weight: 600;
+        }
+
+        /* Confetti */
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: #ff6b9d;
+            position: absolute;
+            animation: confetti-fall 3s linear infinite;
+        }
+
+        @keyframes confetti-fall {
+            to {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .time-box {
+                min-width: 60px;
+                padding: 15px 4px;
+            }
+            
+            .time-label {
+                font-size: 9px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Subtle Floating Shapes -->
+    <div class="shapes-container">
+        <div class="shape"></div>
+        <div class="shape"></div>
+        <div class="shape"></div>
+        <div class="shape"></div>
+        <div class="shape"></div>
+    </div>
+
+    <div class="container">
+        <div class="subtitle">untuk pacarku taciak</div>
+        <h1 class="title" id="mainTitle">ADA YANG MAU ULTAH</h1>
+        
+        <div class="countdown" id="countdown">
+            <div class="time-box">
+                <div class="time-value" id="days">000</div>
+                <div class="time-label">DAYS</div>
+            </div>
+            <div class="time-box">
+                <div class="time-value" id="hours">00</div>
+                <div class="time-label">HOURS</div>
+            </div>
+            <div class="time-box">
+                <div class="time-value" id="minutes">00</div>
+                <div class="time-label">MIN</div>
+            </div>
+            <div class="time-box">
+                <div class="time-value" id="seconds">00</div>
+                <div class="time-label">SEC</div>
+            </div>
+        </div>
+
+        <div class="message-box" id="messageBox">
+            <div class="message-title">RANDOM MESSAGE</div>
+            <div class="message-subtitle">Klik Here 💌</div>
+        </div>
+        
+        <div class="bottom-subtitle">dari pacarmu yang paling ganteng</div>
+    </div>
+
+    <!-- Modal -->
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <p class="modal-message" id="modalMessage"></p>
+        </div>
+    </div>
+
+    <script>
+        // Target date: 12 Juni 2026, 00:00:00 WIB (GMT+7)
+        const targetDate = new Date('2026-06-12T00:00:00+07:00').getTime();
+
+        const messages = [
+            "pacarku cantik poolll walaupun pesek 😘",
+            "kangen pacarkuuuu!! 💕",
+            "kamu kangen aku gaaaa 🥺",
+            "udah eek blom? 💩",
+            "jangan lupa eek 🚽",
+            "pacarku debeesss!! 🥰",
+            "mana kiss nya 😗",
+            "ayok main ps 🎮",
+            "ada yang mau ultah nih 🎂",
+            "ada yang uda mau makin tua niii 👵"
+        ];
+
+        let availableMessages = [...messages];
+        let isBirthdayMode = false;
+
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const distance = targetDate - now;
+
+            if (distance < 0 && !isBirthdayMode) {
+                activateBirthdayMode();
+                return;
+            }
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById('days').textContent = String(days).padStart(3, '0');
+            document.getElementById('hours').textContent = String(hours).padStart(2, '0');
+            document.getElementById('minutes').textContent = String(minutes).padStart(2, '0');
+            document.getElementById('seconds').textContent = String(seconds).padStart(2, '0');
+        }
+
+        function activateBirthdayMode() {
+            isBirthdayMode = true;
+            const title = document.getElementById('mainTitle');
+            title.textContent = 'HAPPY BIRTHDAY PACARKUUUU';
+            title.className = 'title birthday-title';
+            
+            const subtitle = document.querySelector('.subtitle');
+            subtitle.innerHTML = '<div class="birthday-subtitle">semoga sehat selalu, makin cantik, makin sayang aku muaahhh 💕</div>';
+            
+            document.getElementById('countdown').style.display = 'none';
+            
+            createConfetti();
+        }
+
+        function createConfetti() {
+            const colors = ['#ff6b9d', '#ffa8c5', '#c770f0', '#94b9ff', '#ffe66d'];
+            for (let i = 0; i < 50; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    confetti.style.left = Math.random() * 100 + 'vw';
+                    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.animationDelay = Math.random() * 3 + 's';
+                    document.body.appendChild(confetti);
+                    
+                    setTimeout(() => confetti.remove(), 3000);
+                }, i * 100);
+            }
+        }
+
+        // Modal functionality
+        const modal = document.getElementById('myModal');
+        const messageBox = document.getElementById('messageBox');
+        const closeBtn = document.getElementsByClassName('close')[0];
+        const modalMessage = document.getElementById('modalMessage');
+
+        messageBox.onclick = function() {
+            if (availableMessages.length === 0) {
+                availableMessages = [...messages];
+            }
+            
+            const randomIndex = Math.floor(Math.random() * availableMessages.length);
+            const message = availableMessages[randomIndex];
+            availableMessages.splice(randomIndex, 1);
+            
+            modalMessage.textContent = message;
+            modal.style.display = 'block';
+        }
+
+        closeBtn.onclick = function() {
+            modal.style.display = 'none';
+        }
+
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        }
+
+        // Update countdown every second
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
+    </script>
+</body>
+</html>
